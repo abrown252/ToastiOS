@@ -17,4 +17,12 @@ public struct ToastConfiguration {
     let image: UIImage?
     let edge: ToastEdge
     let displayDuration: TimeInterval
+    
+    public init(title: String, body: String?, image: UIImage?, edge: ToastEdge, displayDuration: TimeInterval) {
+        self.title = title
+        self.body = body
+        self.image = image
+        self.edge = edge
+        self.displayDuration = displayDuration
+    }
 }
