@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 @available(iOS 9.0, *)
-extension UIView {
+public extension UIView {
     
     // Wrappers for < iOS11 support
     private var safeAreaInsetTop: CGFloat {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ToastEdge: Int {
+public enum ToastEdge: Int {
     case top = 1
     case bottom
     

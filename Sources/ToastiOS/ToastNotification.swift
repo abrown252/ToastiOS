@@ -11,7 +11,7 @@ import UIKit
 #endif
 
 @available(iOS 9.0, *)
-class ToastNotification: UIView {
+internal class ToastNotification: UIView {
 
     var stackView: UIStackView
     let title: String

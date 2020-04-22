@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 #endif
 
-struct ToastConfiguration {
+public struct ToastConfiguration {
     let title: String
     let body: String?
     let image: UIImage?
