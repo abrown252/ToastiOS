@@ -81,7 +81,7 @@ internal class ToastNotification: UIView {
 
         addSubview(stackView)
 
-        let bottomConstant: CGFloat = body != nil ? -20 : -15
+        let bottomConstant: CGFloat = body != nil ? -15 : -15
         let topConstant: CGFloat = body != nil ? 10 : 15
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
