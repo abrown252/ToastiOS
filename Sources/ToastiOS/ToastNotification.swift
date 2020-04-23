@@ -127,8 +127,8 @@ internal class ToastNotification: UIView {
         NSLayoutConstraint.activate([
             imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            container.widthAnchor.constraint(equalToConstant: 40),
-            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
+            container.widthAnchor.constraint(equalToConstant: 30),
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
         ])
         
         stackView.addArrangedSubview(container)
