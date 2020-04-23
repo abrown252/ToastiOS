@@ -42,7 +42,7 @@ internal class ToastNotification: UIView {
         super.init(frame: .zero)
         
         if #available(iOS 13.0, *) {
-            backgroundColor = UIColor.quaternarySystemFill
+            backgroundColor = UIColor.secondarySystemFill
         } else {
             backgroundColor = UIColor.white
         }
