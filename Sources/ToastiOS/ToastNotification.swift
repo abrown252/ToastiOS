@@ -65,13 +65,15 @@ internal class ToastNotification: UIView {
         self.titleLabel?.text = title
         self.bodyLabel?.text = body
         
-        if let accessoryView = accessoryView {
-            accessoryViewContainer?.subviews.forEach({ $0.removeFromSuperview() })
+        if let accessoryView = accessoryView,
+            let container = accessoryViewContainer {
+            container.subviews.forEach({ $0.removeFromSuperview() })
+            container.addSubview(accessoryView)
             NSLayoutConstraint.activate([
-                accessoryView.centerYAnchor.constraint(equalTo: accessoryViewContainer!.centerYAnchor),
-                accessoryView.centerXAnchor.constraint(equalTo: accessoryViewContainer!.centerXAnchor),
-                accessoryViewContainer!.widthAnchor.constraint(equalToConstant: 30),
-                accessoryViewContainer!.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+                accessoryView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+                accessoryView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                container.widthAnchor.constraint(equalToConstant: 30),
+                container.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
             ])
             self.layoutIfNeeded()
         }
