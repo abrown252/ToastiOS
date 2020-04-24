@@ -17,12 +17,14 @@ public struct ToastConfiguration {
     let accessoryView: ToastAccessory?
     let edge: ToastEdge
     let displayDuration: TimeInterval
-    
-    public init(title: String, body: String?, accessoryView: ToastAccessory?, edge: ToastEdge, displayDuration: TimeInterval) {
+    let autoDismiss: Bool
+        
+    public init(title: String, body: String?, accessoryView: ToastAccessory?, edge: ToastEdge, displayDuration: TimeInterval, autoDismiss: Bool = true) {
         self.title = title
         self.body = body
         self.accessoryView = accessoryView
         self.edge = edge
         self.displayDuration = displayDuration
+        self.autoDismiss = autoDismiss
     }
 }

@@ -45,8 +45,12 @@ public extension UIView {
         return bottomAnchor
     }
     
-    func isShowingToast(for edge: ToastEdge) -> Bool {
-        return viewWithTag(edge.tag) != nil
+    private func isShowingToast(for edge: ToastEdge) -> Bool {
+        return getActiveToast(for: edge) != nil
+    }
+    
+    private func getActiveToast(for edge: ToastEdge) -> ToastNotification? {
+        return viewWithTag(edge.tag) as? ToastNotification
     }
     
     func makeToast(title: String, edge: ToastEdge = .top) {
@@ -72,26 +76,54 @@ public extension UIView {
         toast.setNeedsLayout()
         toast.layoutIfNeeded()
         
-        layout(edge: configuration.edge, toast: toast, duration: configuration.displayDuration)
+        let duration = configuration.autoDismiss ? 0 : configuration.displayDuration
+        layout(edge: configuration.edge, toast: toast, duration: duration)
+    }
+    
+    func dismissActiveToast(for edge: ToastEdge) {
+        guard let toast = getActiveToast(for: edge)
+            else {assert(false, "Could not find toast at edge \(edge)"); return}
+        
+        animateOut(toast: toast, delay: 0, edge: edge)
+    }
+    
+    func updateActiveToast(for edge: ToastEdge, title: String?, body: String?, accessoryView: UIView?) {
+        guard let toast = getActiveToast(for: edge)
+            else {assert(false, "Could not find toast at edge \(edge)"); return}
+        
+        toast.updateToast(title: title, body: body, accessoryView: accessoryView)
     }
     
     private func layout(edge: ToastEdge, toast: ToastNotification, duration: TimeInterval = 3) {
 
         let constraints = self.constraints(for: edge, toast: toast)
         let yConstraint = constraints.y
+        toast.yConstraint = yConstraint
         NSLayoutConstraint.activate([constraints.x, yConstraint])
         self.layoutIfNeeded()
         
-        animate(toast: toast, duration: duration, edge: edge, yConstraint: yConstraint)
+        animate(toast: toast, duration: duration, edge: edge)
     }
 
-    private func animate(toast: ToastNotification, duration: TimeInterval, edge: ToastEdge, yConstraint: NSLayoutConstraint) {
+    private func animate(toast: ToastNotification, duration: TimeInterval, edge: ToastEdge) {
+        guard let yConstraint = toast.yConstraint
+            else {return}
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.4, options: .curveEaseOut, animations: {
             yConstraint.constant = 0
             self.layoutIfNeeded()
         }, completion: nil)
+        
+        if duration > 0 {
+            self.animateOut(toast: toast, delay: duration, edge: edge)
+        }
+    }
 
-        UIView.animate(withDuration: 0.2, delay: duration, options: .curveEaseInOut, animations: {
+    private func animateOut(toast: ToastNotification, delay: TimeInterval, edge: ToastEdge) {
+        guard let yConstraint = toast.yConstraint
+            else {return}
+        
+        UIView.animate(withDuration: 0.2, delay: delay, options: .curveEaseInOut, animations: {
             if edge == .top {
                 yConstraint.constant = -(toast.frame.height + self.safeAreaInsetTop)
             } else {

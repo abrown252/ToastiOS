@@ -18,6 +18,12 @@ internal class ToastNotification: UIView {
     let body: String?
     let accessoryView: ToastAccessory?
     
+    var titleLabel: UILabel?
+    var bodyLabel: UILabel?
+    var accessoryViewContainer: UIView?
+        
+    var yConstraint: NSLayoutConstraint?
+    
     var titleWeight: UIFont.Weight {
         return body != nil ? .bold : .medium
     }
@@ -52,6 +58,23 @@ internal class ToastNotification: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init?(coder: NSCoder) not supported")
+    }
+    
+    func updateToast(title: String?, body: String? = nil, accessoryView: UIView? = nil) {
+        
+        self.titleLabel?.text = title
+        self.bodyLabel?.text = body
+        
+        if let accessoryView = accessoryView {
+            accessoryViewContainer?.subviews.forEach({ $0.removeFromSuperview() })
+            NSLayoutConstraint.activate([
+                accessoryView.centerYAnchor.constraint(equalTo: accessoryViewContainer!.centerYAnchor),
+                accessoryView.centerXAnchor.constraint(equalTo: accessoryViewContainer!.centerXAnchor),
+                accessoryViewContainer!.widthAnchor.constraint(equalToConstant: 30),
+                accessoryViewContainer!.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+            ])
+            self.layoutIfNeeded()
+        }
     }
     
     private func setupView() {
@@ -97,7 +120,9 @@ internal class ToastNotification: UIView {
         textContainerStackView.axis = .vertical
         textContainerStackView.spacing = 5
         textContainerStackView.distribution = .fillEqually
-        textContainerStackView.addArrangedSubview(addLabel(text: title, weight: titleWeight, size: titleSize))
+        
+        titleLabel = addLabel(text: title, weight: titleWeight, size: titleSize)
+        textContainerStackView.addArrangedSubview(titleLabel!)
         
         addBody(stackView: textContainerStackView)
         stackView.addArrangedSubview(textContainerStackView)
@@ -109,31 +134,30 @@ internal class ToastNotification: UIView {
         guard let body = body
             else {return}
         
-        let bodyLabel = addLabel(text: body, weight: .medium, size: 16)
-        stackView.addArrangedSubview(bodyLabel)
+        self.bodyLabel = addLabel(text: body, weight: .medium, size: 16)
+        stackView.addArrangedSubview(bodyLabel!)
     }
     
     private func addAccessoryView()  {
         guard let accessoryView = accessoryView
             else {return }
         
-        
-        let containerView = UIView(frame: .zero)
+        accessoryViewContainer = UIView(frame: .zero)
         accessoryView.accessoryView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.translatesAutoresizingMaskIntoConstraints = false
+        accessoryViewContainer?.translatesAutoresizingMaskIntoConstraints = false
         
-        containerView.addSubview(accessoryView.accessoryView)
+        accessoryViewContainer?.addSubview(accessoryView.accessoryView)
         
         NSLayoutConstraint.activate([
-            accessoryView.accessoryView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            accessoryView.accessoryView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            containerView.widthAnchor.constraint(equalToConstant: 30),
-            containerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+            accessoryView.accessoryView.centerYAnchor.constraint(equalTo: accessoryViewContainer!.centerYAnchor),
+            accessoryView.accessoryView.centerXAnchor.constraint(equalTo: accessoryViewContainer!.centerXAnchor),
+            accessoryViewContainer!.widthAnchor.constraint(equalToConstant: 30),
+            accessoryViewContainer!.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
         ])
         
         let position = accessoryView.position == .right && !stackView.arrangedSubviews.isEmpty ? 1 : 0
         
-        stackView.insertArrangedSubview(containerView, at: position)
+        stackView.insertArrangedSubview(accessoryViewContainer!, at: position)
     }
     
     private func addLabel(text: String, weight: UIFont.Weight, size: CGFloat = 18) -> UILabel {
