@@ -64,19 +64,21 @@ internal class ToastNotification: UIView {
         
         self.titleLabel?.text = title
         self.bodyLabel?.text = body
+
+        // We don't want the container to shrink with the new text, but it can get bigger
+        self.widthAnchor.constraint(greaterThanOrEqualToConstant: self.frame.size.width).isActive = true
         
         if let accessoryView = accessoryView,
             let container = accessoryViewContainer {
+            accessoryView.translatesAutoresizingMaskIntoConstraints = false
             container.subviews.forEach({ $0.removeFromSuperview() })
             container.addSubview(accessoryView)
             NSLayoutConstraint.activate([
                 accessoryView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                accessoryView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                container.widthAnchor.constraint(equalToConstant: 30),
-                container.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+                accessoryView.centerXAnchor.constraint(equalTo: container.centerXAnchor)
             ])
-//            self.layoutIfNeeded()
         }
+        self.layoutIfNeeded()
     }
     
     private func setupView() {
