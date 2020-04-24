@@ -75,7 +75,7 @@ internal class ToastNotification: UIView {
                 container.widthAnchor.constraint(equalToConstant: 30),
                 container.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
             ])
-            self.layoutIfNeeded()
+//            self.layoutIfNeeded()
         }
     }
     
