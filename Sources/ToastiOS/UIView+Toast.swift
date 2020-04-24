@@ -65,7 +65,7 @@ public extension UIView {
     func makeToast(configuration: ToastConfiguration) {
         if isShowingToast(for: configuration.edge) {return}
         
-        let toast = ToastNotification(title: configuration.title, body: configuration.body, image: configuration.image)
+        let toast = ToastNotification(title: configuration.title, body: configuration.body, accessoryView: configuration.accessoryView)
         toast.tag = configuration.edge.tag
         addSubview(toast)
         

@@ -14,14 +14,14 @@ import UIKit
 public struct ToastConfiguration {
     let title: String
     let body: String?
-    let image: UIImage?
+    let accessoryView: ToastAccessory?
     let edge: ToastEdge
     let displayDuration: TimeInterval
     
-    public init(title: String, body: String?, image: UIImage?, edge: ToastEdge, displayDuration: TimeInterval) {
+    public init(title: String, body: String?, accessoryView: ToastAccessory?, edge: ToastEdge, displayDuration: TimeInterval) {
         self.title = title
         self.body = body
-        self.image = image
+        self.accessoryView = accessoryView
         self.edge = edge
         self.displayDuration = displayDuration
     }

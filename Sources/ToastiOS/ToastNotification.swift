@@ -16,7 +16,7 @@ internal class ToastNotification: UIView {
     var stackView: UIStackView
     let title: String
     let body: String?
-    let image: UIImage?
+    let accessoryView: ToastAccessory?
     
     var titleWeight: UIFont.Weight {
         return body != nil ? .bold : .medium
@@ -27,17 +27,17 @@ internal class ToastNotification: UIView {
     }
      
     var textAlignment: NSTextAlignment {
-        return image != nil ? .left : .center
+        return accessoryView != nil ? .left : .center
     }
     
     var stackViewFill: UIStackView.Distribution {
-        return image != nil ? .fillProportionally : .fillEqually
+        return accessoryView != nil ? .fillProportionally : .fillEqually
     }
     
-    init(title: String, body: String? = nil, image: UIImage? = nil) {
+    init(title: String, body: String? = nil, accessoryView: ToastAccessory? = nil) {
         self.title = title
         self.body = body
-        self.image = image
+        self.accessoryView = accessoryView
         stackView = UIStackView()
         super.init(frame: .zero)
         
@@ -82,7 +82,7 @@ internal class ToastNotification: UIView {
         addSubview(stackView)
 
         let topConstant: CGFloat = body != nil ? 10 : 15
-        let trailingConstraint: CGFloat = image != nil ? -20 : -15
+        let trailingConstraint: CGFloat = accessoryView != nil ? -20 : -15
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: trailingConstraint),
@@ -92,18 +92,17 @@ internal class ToastNotification: UIView {
     }
     
     private func addContent() {
-        addImage()
-        
         let textContainerStackView = UIStackView()
         textContainerStackView.translatesAutoresizingMaskIntoConstraints = false
         textContainerStackView.axis = .vertical
         textContainerStackView.spacing = 5
         textContainerStackView.distribution = .fillEqually
         textContainerStackView.addArrangedSubview(addLabel(text: title, weight: titleWeight, size: titleSize))
-                
-        addBody(stackView: textContainerStackView)
         
+        addBody(stackView: textContainerStackView)
         stackView.addArrangedSubview(textContainerStackView)
+        
+        addAccessoryView()
     }
     
     private func addBody(stackView: UIStackView) {
@@ -114,24 +113,20 @@ internal class ToastNotification: UIView {
         stackView.addArrangedSubview(bodyLabel)
     }
     
-    private func addImage()  {
-        guard let image = image
+    private func addAccessoryView()  {
+        guard let accessoryView = accessoryView
             else {return }
         
-        let imageView = UIImageView(image: image)
-        let container = UIView(frame: .zero)
-        container.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(imageView)
+        accessoryView.accessoryView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            container.widthAnchor.constraint(equalToConstant: 30),
-            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+            accessoryView.accessoryView.widthAnchor.constraint(equalToConstant: 30),
+            accessoryView.accessoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
         ])
         
-        stackView.addArrangedSubview(container)
+        let position = accessoryView.position == .right && !stackView.arrangedSubviews.isEmpty ? 1 : 0
+        
+        stackView.insertArrangedSubview(accessoryView.accessoryView, at: position)
     }
     
     private func addLabel(text: String, weight: UIFont.Weight, size: CGFloat = 18) -> UILabel {
