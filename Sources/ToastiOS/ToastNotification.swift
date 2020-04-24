@@ -92,6 +92,7 @@ internal class ToastNotification: UIView {
     }
     
     private func addContent() {
+        addAccessoryView()
         let textContainerStackView = UIStackView()
         textContainerStackView.translatesAutoresizingMaskIntoConstraints = false
         textContainerStackView.axis = .vertical
@@ -102,7 +103,7 @@ internal class ToastNotification: UIView {
         addBody(stackView: textContainerStackView)
         stackView.addArrangedSubview(textContainerStackView)
         
-        addAccessoryView()
+        
     }
     
     private func addBody(stackView: UIStackView) {
@@ -126,7 +127,7 @@ internal class ToastNotification: UIView {
         
         let position = accessoryView.position == .right && !stackView.arrangedSubviews.isEmpty ? 1 : 0
         
-        stackView.insertArrangedSubview(accessoryView.accessoryView, at: position)
+        stackView.insertArrangedSubview(accessoryView.accessoryView, at: 0)
     }
     
     private func addLabel(text: String, weight: UIFont.Weight, size: CGFloat = 18) -> UILabel {
