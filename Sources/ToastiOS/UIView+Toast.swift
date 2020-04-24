@@ -91,18 +91,16 @@ public extension UIView {
             self.layoutIfNeeded()
         }, completion: nil)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.4, options: .curveEaseOut, animations: {
-                if edge == .top {
-                    yConstraint.constant = -(toast.frame.height + self.safeAreaInsetTop)
-                } else {
-                    yConstraint.constant += (toast.frame.height + self.safeAreaInsetBottom)
-                }
-
-                self.layoutIfNeeded()
-            }) { complete in
-                toast.removeFromSuperview()
+        UIView.animate(withDuration: 0.3, delay: duration, options: .curveEaseInOut, animations: {
+            if edge == .top {
+                yConstraint.constant = -(toast.frame.height + self.safeAreaInsetTop)
+            } else {
+                yConstraint.constant += (toast.frame.height + self.safeAreaInsetBottom)
             }
+
+            self.layoutIfNeeded()
+        }) { (complete) in
+            toast.removeFromSuperview()
         }
     }
     
