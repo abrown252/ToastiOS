@@ -91,7 +91,7 @@ public extension UIView {
             self.layoutIfNeeded()
         }, completion: nil)
 
-        UIView.animate(withDuration: 0.3, delay: duration, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: duration, options: .curveEaseInOut, animations: {
             if edge == .top {
                 yConstraint.constant = -(toast.frame.height + self.safeAreaInsetTop)
             } else {
