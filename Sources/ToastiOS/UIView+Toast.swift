@@ -77,7 +77,7 @@ public extension UIView {
         toast.layoutIfNeeded()
         
         let duration = configuration.autoDismiss ? 0 : configuration.displayDuration
-        layout(edge: configuration.edge, toast: toast, duration: duration)
+        layout(edge: configuration.edge, toast: toast, duration: duration, autoDismiss: configuration.autoDismiss)
     }
     
     func dismissActiveToast(for edge: ToastEdge) {
@@ -94,7 +94,7 @@ public extension UIView {
         toast.updateToast(title: title, body: body, accessoryView: accessoryView)
     }
     
-    private func layout(edge: ToastEdge, toast: ToastNotification, duration: TimeInterval = 3) {
+    private func layout(edge: ToastEdge, toast: ToastNotification, duration: TimeInterval = 3, autoDismiss: Bool = true) {
 
         let constraints = self.constraints(for: edge, toast: toast)
         let yConstraint = constraints.y
@@ -102,10 +102,10 @@ public extension UIView {
         NSLayoutConstraint.activate([constraints.x, yConstraint])
         self.layoutIfNeeded()
         
-        animate(toast: toast, duration: duration, edge: edge)
+        animate(toast: toast, duration: duration, edge: edge, autoDismiss: autoDismiss)
     }
 
-    private func animate(toast: ToastNotification, duration: TimeInterval, edge: ToastEdge) {
+    private func animate(toast: ToastNotification, duration: TimeInterval, edge: ToastEdge, autoDismiss: Bool = true) {
         guard let yConstraint = toast.yConstraint
             else {return}
         
@@ -114,7 +114,7 @@ public extension UIView {
             self.layoutIfNeeded()
         }, completion: nil)
         
-        if duration > 0 {
+        if autoDismiss {
             self.animateOut(toast: toast, delay: duration, edge: edge)
         }
     }
