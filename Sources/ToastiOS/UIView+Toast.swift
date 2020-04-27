@@ -76,8 +76,7 @@ public extension UIView {
         toast.setNeedsLayout()
         toast.layoutIfNeeded()
         
-        let duration = configuration.autoDismiss ? 0 : configuration.displayDuration
-        layout(edge: configuration.edge, toast: toast, duration: duration, autoDismiss: configuration.autoDismiss)
+        layout(edge: configuration.edge, toast: toast, duration: configuration.displayDuration, autoDismiss: configuration.autoDismiss)
     }
     
     func dismissActiveToast(for edge: ToastEdge) {
