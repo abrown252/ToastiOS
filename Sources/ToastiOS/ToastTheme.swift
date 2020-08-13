@@ -12,6 +12,12 @@ public struct ToastTheme {
     let backgroundColor: UIColor
     let titleColor: UIColor
     let bodyColor: UIColor
+
+    public init(backgroundColor: UIColor, titleColor: UIColor, bodyColor: UIColor) {
+        self.backgroundColor = backgroundColor
+        self.titleColor = titleColor
+        self.bodyColor = bodyColor
+    }
 }
 
 public extension ToastTheme {
