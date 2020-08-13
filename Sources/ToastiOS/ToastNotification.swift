@@ -17,6 +17,7 @@ internal class ToastNotification: UIView {
     let title: String
     let body: String?
     let accessoryView: ToastAccessory?
+    let theme: ToastTheme
     
     var titleLabel: UILabel?
     var bodyLabel: UILabel?
@@ -40,19 +41,14 @@ internal class ToastNotification: UIView {
         return accessoryView != nil ? .fillProportionally : .fillEqually
     }
     
-    init(title: String, body: String? = nil, accessoryView: ToastAccessory? = nil) {
+    init(title: String, body: String? = nil, accessoryView: ToastAccessory? = nil, theme: ToastTheme = .standard) {
         self.title = title
         self.body = body
         self.accessoryView = accessoryView
+        self.theme = theme
         stackView = UIStackView()
         super.init(frame: .zero)
-        
-        if #available(iOS 13.0, *) {
-            backgroundColor = UIColor.systemBackground
-        } else {
-            backgroundColor = UIColor.white
-        }
-        translatesAutoresizingMaskIntoConstraints = false
+
         setupView()
     }
     
@@ -82,6 +78,9 @@ internal class ToastNotification: UIView {
     }
     
     private func setupView() {
+        backgroundColor = theme.backgroundColor
+        translatesAutoresizingMaskIntoConstraints = false
+
         addDefaultStackView()
         
         addContent()
@@ -126,6 +125,7 @@ internal class ToastNotification: UIView {
         textContainerStackView.distribution = .fillEqually
         
         titleLabel = addLabel(text: title, weight: titleWeight, size: titleSize)
+        titleLabel?.textColor = theme.titleColor
         textContainerStackView.addArrangedSubview(titleLabel!)
         
         addBody(stackView: textContainerStackView)
@@ -138,7 +138,8 @@ internal class ToastNotification: UIView {
         guard let body = body
             else {return}
         
-        self.bodyLabel = addLabel(text: body, weight: .medium, size: 16)
+        bodyLabel = addLabel(text: body, weight: .medium, size: 16)
+        bodyLabel?.textColor = theme.bodyColor
         stackView.addArrangedSubview(bodyLabel!)
     }
     
