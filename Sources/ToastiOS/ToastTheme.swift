@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-struct ToastTheme {
+public struct ToastTheme {
     let backgroundColor: UIColor
     let titleColor: UIColor
     let bodyColor: UIColor
 }
 
-extension ToastTheme {
+public extension ToastTheme {
     static var standard: ToastTheme {
         var backgroundColor = UIColor.white
         if #available(iOS 13.0, *) {
